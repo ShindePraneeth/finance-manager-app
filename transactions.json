@@ -1,0 +1,50 @@
+[
+  {
+    "id": "1",
+    "userId": "1",
+    "description": "Salary",
+    "category": "Income",
+    "amount": 5000,
+    "date": "2023-06-01"
+  },
+  {
+    "id": "2",
+    "userId": "1",
+    "description": "Rent",
+    "category": "Expense",
+    "amount": 1200,
+    "date": "2023-06-05"
+  },
+  {
+    "id": "3",
+    "userId": "1",
+    "description": "Groceries",
+    "category": "Expense",
+    "amount": 300,
+    "date": "2023-06-10"
+  },
+  {
+    "id": "4",
+    "userId": "2",
+    "description": "Freelance Project",
+    "category": "Income",
+    "amount": 1500,
+    "date": "2023-06-15"
+  },
+  {
+    "id": "5",
+    "userId": "2",
+    "description": "Utilities",
+    "category": "Expense",
+    "amount": 200,
+    "date": "2023-06-20"
+  },
+  {
+    "id": 6,
+    "userId": "1",
+    "description": "aadhajd",
+    "amount": 988,
+    "type": "income",
+    "date": "2024-07-23"
+  }
+]
