@@ -13,13 +13,20 @@
   },
   {
     "id": 3,
-    "username": "asd",
-    "password": "123456"
+    "username": "shinde",
+    "email": "shinde@gmail.com",
+    "password": "shinde"
   },
   {
     "id": 4,
-    "username": "asdf",
-    "email": "asdf@gmail.com",
+    "username": "qa",
+    "email": "qa@gmail.com",
     "password": "123456"
+  },
+  {
+    "id": 5,
+    "username": "kumar",
+    "email": "kumar@gmail.com",
+    "password": "kumar@123"
   }
 ]

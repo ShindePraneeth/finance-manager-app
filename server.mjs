@@ -1,3 +1,4 @@
+//finance-manager\server.mjs
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
@@ -63,14 +64,88 @@ app.post('/login', (req, res) => {
   const user = users.find(u => (u.username === username || u.email === username) && u.password === password);
 
   if (user) {
-    const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id.toString(), username: user.username }, SECRET_KEY, { expiresIn: '1h' });
     res.json({ token });
   } else {
     res.status(401).json({ message: 'Invalid credentials' });
   }
 });
+// Middleware to verify JWT
+const verifyToken = (req, res, next) => {
+  const token = req.headers['authorization'];
+  if (!token) return res.status(403).json({ message: 'No token provided' });
 
-// ... (keep other existing routes)
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+    if (err) return res.status(500).json({ message: 'Failed to authenticate token' });
+    req.userId = decoded.id;
+    next();
+  });
+};
+
+// Get transactions for a user
+app.get('/transactions', verifyToken, (req, res) => {
+  const userTransactions = transactions.filter(t => t.userId.toString() === req.userId.toString());
+  res.json(userTransactions);
+});
+
+// Add a new transaction
+app.post('/transactions', verifyToken, async (req, res) => {
+  const newTransaction = {
+    id: (transactions.length + 1).toString(),
+    userId: req.userId.toString(), // Ensure userId is a string
+    description: req.body.description,
+    amount: parseFloat(req.body.amount),
+    type: (req.body.type || req.body.category || 'expense').toLowerCase(), // Normalize type/category
+    date: req.body.date
+  };
+  transactions.push(newTransaction);
+  try {
+    await fs.writeFile('transactions.json', JSON.stringify(transactions, null, 2));
+    res.json(newTransaction);
+  } catch (error) {
+    console.error('Error writing transaction data:', error);
+    res.status(500).json({ message: 'Error saving transaction' });
+  }
+});
+// Update a transaction
+app.put('/transactions/:id', verifyToken, async (req, res) => {
+  const transactionId = req.params.id;
+  const index = transactions.findIndex(t => t.id === transactionId && t.userId === req.userId);
+  
+  if (index === -1) {
+    return res.status(404).json({ message: 'Transaction not found or not authorized' });
+  }
+
+  transactions[index] = { ...transactions[index], ...req.body };
+
+  try {
+    await fs.writeFile('transactions.json', JSON.stringify(transactions, null, 2));
+    res.json(transactions[index]);
+  } catch (error) {
+    console.error('Error writing transaction data:', error);
+    res.status(500).json({ message: 'Error updating transaction' });
+  }
+});
+
+// Delete a transaction
+app.delete('/transactions/:id', verifyToken, async (req, res) => {
+  const transactionId = req.params.id;
+  const index = transactions.findIndex(t => t.id === transactionId && t.userId === req.userId);
+  
+  if (index === -1) {
+    return res.status(404).json({ message: 'Transaction not found or not authorized' });
+  }
+
+  transactions.splice(index, 1);
+
+  try {
+    await fs.writeFile('transactions.json', JSON.stringify(transactions, null, 2));
+    res.json({ message: 'Transaction deleted successfully' });
+  } catch (error) {
+    console.error('Error writing transaction data:', error);
+    res.status(500).json({ message: 'Error deleting transaction' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

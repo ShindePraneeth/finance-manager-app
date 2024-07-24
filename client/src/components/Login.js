@@ -1,7 +1,8 @@
+//finance-manager\client\src\components\Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-
+import { Container, Form, Input, Button, Title, LinkButton } from'../styles';
 function Login() {
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,27 +20,27 @@ function Login() {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
+    <Container>
+      <Title>Login</Title>
+      <Form onSubmit={handleSubmit}>
+        <Input
           type="text"
           placeholder="Username or Email"
           value={usernameOrEmail}
           onChange={(e) => setUsernameOrEmail(e.target.value)}
           required
         />
-        <input
+        <Input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
-      </form>
-      <p>Don't have an account? <Link to="/register">Register</Link></p>
-    </div>
+        <Button type="submit">Login</Button>
+      </Form>
+      <p>Don't have an account? <LinkButton to="/register">Register</LinkButton></p>
+    </Container>
   );
 }
 

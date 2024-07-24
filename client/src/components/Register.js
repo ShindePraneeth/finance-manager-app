@@ -1,7 +1,9 @@
+//finance-manager\client\src\components\Register.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
+import { Container, Form, Input, Button, Title, LinkButton } from'../styles';
 function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -11,7 +13,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3001/register', { username, email, password });
+      await axios.post('http://localhost:3001/register', { username,password, email  });
       alert('Registration successful! Please login.');
       navigate('/');
     } catch (error) {
@@ -24,34 +26,35 @@ function Register() {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <input
+    <Container>
+      <Title>Register</Title>
+      <Form onSubmit={handleSubmit}>
+        <Input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
+         <Input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Register</button>
-      </form>
-      <p>Already have an account? <Link to="/">Login</Link></p>
-    </div>
+        <Input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+       
+        <Button type="submit">Register</Button>
+      </Form>
+      <p>Already have an account? <LinkButton to="/">Login</LinkButton></p>
+    </Container>
   );
 }
 
