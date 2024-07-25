@@ -28,5 +28,11 @@
     "username": "kumar",
     "email": "kumar@gmail.com",
     "password": "kumar@123"
+  },
+  {
+    "id": 6,
+    "username": "shinde1",
+    "email": "shinde1@gmail.com",
+    "password": "shinde1"
   }
 ]

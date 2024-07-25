@@ -107,7 +107,6 @@ app.post('/transactions', verifyToken, async (req, res) => {
     res.status(500).json({ message: 'Error saving transaction' });
   }
 });
-// Update a transaction
 app.put('/transactions/:id', verifyToken, async (req, res) => {
   const transactionId = req.params.id;
   const index = transactions.findIndex(t => t.id === transactionId && t.userId === req.userId);
@@ -116,16 +115,24 @@ app.put('/transactions/:id', verifyToken, async (req, res) => {
     return res.status(404).json({ message: 'Transaction not found or not authorized' });
   }
 
-  transactions[index] = { ...transactions[index], ...req.body };
+  // Retain existing transaction details and only update fields that are provided
+  const updatedTransaction = {
+    ...transactions[index],
+    ...req.body,
+    type: req.body.type || transactions[index].type // Ensure type is not overwritten with an empty value
+  };
+
+  transactions[index] = updatedTransaction;
 
   try {
     await fs.writeFile('transactions.json', JSON.stringify(transactions, null, 2));
-    res.json(transactions[index]);
+    res.json(updatedTransaction);
   } catch (error) {
     console.error('Error writing transaction data:', error);
     res.status(500).json({ message: 'Error updating transaction' });
   }
 });
+
 
 // Delete a transaction
 app.delete('/transactions/:id', verifyToken, async (req, res) => {

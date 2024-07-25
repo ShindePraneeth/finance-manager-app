@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-
-import { Container, Form, Input, Button, Title, LinkButton } from'../styles';
+import { FaPlus, FaHome, FaSignOutAlt } from 'react-icons/fa';
+import { Container,NavIcon,Header, Form, Input, Button, Title, LinkButton } from'../styles';
 function Dashboard() {
   const [transactions, setTransactions] = useState([]);
   const navigate = useNavigate();
@@ -74,9 +74,22 @@ function Dashboard() {
 
   return (
     <Container>
+              <Header>
+              <NavIcon onClick={() => navigate('/dashboard')}>
+
+              <FaHome />
+          <span>Dashboard</span>
+        </NavIcon>
+        <NavIcon onClick={() => navigate('/add-transaction')}>
+          <FaPlus />
+          <span>Add Transaction</span>
+        </NavIcon>
+        <NavIcon onClick={handleLogout}>
+          <FaSignOutAlt />
+          <span>Logout</span>
+        </NavIcon>
+      </Header>
       <Title>Dashboard</Title>
-      <Button onClick={handleLogout}>Logout</Button>
-      <LinkButton to="/add-transaction">Add Transaction</LinkButton>
       <TransactionList transactions={incomeTransactions} title="Income" />
       <TransactionList transactions={expenseTransactions} title="Expenses" />
     </Container>

@@ -3,15 +3,15 @@
     "id": "1",
     "userId": "1",
     "description": "Salary",
-    "type": "Income",
-    "amount": 5000,
+    "category": "Income",
+    "amount": 5100,
     "date": "2023-06-01"
   },
   {
     "id": "2",
     "userId": "1",
     "description": "Rent",
-    "type": "Expense",
+    "category": "Expense",
     "amount": 1200,
     "date": "2023-06-05"
   },
@@ -19,7 +19,7 @@
     "id": "3",
     "userId": "1",
     "description": "Groceries",
-    "type": "Expense",
+    "category": "Expense",
     "amount": 300,
     "date": "2023-06-10"
   },
@@ -27,7 +27,7 @@
     "id": "4",
     "userId": "2",
     "description": "Freelance Project",
-    "type": "Income",
+    "category": "Income",
     "amount": 1500,
     "date": "2023-06-15"
   },
@@ -35,48 +35,8 @@
     "id": "5",
     "userId": "2",
     "description": "Utilities",
-    "type": "Expense",
+    "category": "Expense",
     "amount": 200,
     "date": "2023-06-20"
-  },
-  {
-    "id": "7",
-    "userId": "3",
-    "description": "qwe",
-    "amount": 900,
-    "type": "",
-    "date": "2024-07-10"
-  },
-  {
-    "id": "8",
-    "userId": "1",
-    "description": "az",
-    "amount": 215,
-    "type": "expense",
-    "date": "2024-07-18"
-  },
-  {
-    "id": "8",
-    "userId": "3",
-    "description": "tg",
-    "amount": 890,
-    "type": "",
-    "date": "2024-07-09"
-  },
-  {
-    "id": "9",
-    "userId": "3",
-    "description": "asd",
-    "amount": 1234,
-    "type": "expense",
-    "date": "2024-07-22"
-  },
-  {
-    "id": "10",
-    "userId": "4",
-    "description": "salary",
-    "amount": 1234,
-    "type": "income",
-    "date": "2024-07-01"
   }
 ]

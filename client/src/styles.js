@@ -55,4 +55,38 @@ export const LinkButton = styled(Link)`
     text-decoration: underline;
   }
 `;
- 
+export const Header = styled.div`
+display: flex;
+justify-content: space-between;
+width: 100%;
+background-color: #f8f9fa;
+padding: 10px 20px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+position: fixed;
+top: 0;
+left: 0;
+`;
+
+export const NavIcon = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+cursor: pointer;
+
+svg {
+  font-size: 24px;
+  color: #007bff;
+}
+
+span {
+  font-size: 12px;
+  color: #007bff;
+}
+
+&:hover {
+  svg,
+  span {
+    color: #0056b3;
+  }
+}
+`;
