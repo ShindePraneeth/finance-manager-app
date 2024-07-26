@@ -38,5 +38,61 @@
     "category": "Expense",
     "amount": 200,
     "date": "2023-06-20"
+  },
+  {
+    "id": "7",
+    "userId": "3",
+    "description": "asdf",
+    "amount": 123,
+    "type": "expense",
+    "date": "2024-07-22"
+  },
+  {
+    "id": "8",
+    "userId": "3",
+    "description": "asdfg",
+    "amount": 1234,
+    "type": "expense",
+    "date": "2024-07-01"
+  },
+  {
+    "id": "9",
+    "userId": "1",
+    "description": "azscv",
+    "amount": 1234,
+    "type": "income",
+    "date": "2024-07-12"
+  },
+  {
+    "id": "10",
+    "userId": "8",
+    "description": "salary",
+    "amount": 6700,
+    "type": "income",
+    "date": "2024-07-20"
+  },
+  {
+    "id": "11",
+    "userId": "8",
+    "description": "princy",
+    "amount": 90000,
+    "type": "expense",
+    "date": "2024-07-25"
+  },
+  {
+    "id": "11",
+    "userId": "3",
+    "description": "food",
+    "amount": 2345,
+    "type": "expense",
+    "date": "2024-07-02"
+  },
+  {
+    "id": "12",
+    "userId": "3",
+    "description": "salry",
+    "amount": 40000,
+    "type": "income",
+    "date": "2024-07-17"
   }
 ]

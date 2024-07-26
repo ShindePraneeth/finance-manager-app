@@ -58,7 +58,7 @@ export const LinkButton = styled(Link)`
 export const Header = styled.div`
 display: flex;
 justify-content: space-between;
-width: 100%;
+width: 97.5%;
 background-color: #f8f9fa;
 padding: 10px 20px;
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -90,3 +90,38 @@ span {
   }
 }
 `;
+export const Select = styled.select`
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+
+  &:hover {
+    border-color: #007bff;
+  }
+
+  &:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+`;
+
+export const tableHeaderStyle = {
+  backgroundColor: '#f2f2f2',
+  padding: '10px',
+  textAlign: 'left',
+  borderBottom: '1px solid #ddd'
+};
+
+export const tableCellStyle = {
+  padding: '10px',
+  borderBottom: '1px solid #ddd'
+};
+
+export const iconStyle = {
+  cursor: 'pointer',
+  marginRight: '10px'
+};

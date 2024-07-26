@@ -34,5 +34,17 @@
     "username": "shinde1",
     "email": "shinde1@gmail.com",
     "password": "shinde1"
+  },
+  {
+    "id": 7,
+    "username": "priya",
+    "email": "p@p",
+    "password": "priya"
+  },
+  {
+    "id": 8,
+    "username": "princy",
+    "email": "princy@gmail.com",
+    "password": "1234567"
   }
 ]

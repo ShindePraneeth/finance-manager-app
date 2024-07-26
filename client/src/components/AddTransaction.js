@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Container, Form, Input, Button, Title, LinkButton } from'../styles'
+import { Container, Form, Input, Button, Title, Select } from'../styles'
 function AddTransaction() {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
@@ -57,10 +57,10 @@ function AddTransaction() {
         onChange={(e) => setDate(e.target.value)}
         required
         />
-        <select value={type} onChange={(e) => setType(e.target.value)}>
+        <Select value={type} onChange={(e) => setType(e.target.value)}>
           <option value="Expense">Expense</option>
           <option value="Income">Income</option>
-        </select>
+        </Select>
         <Button type="submit">Add Transaction</Button>
       </Form>
     </Container>
