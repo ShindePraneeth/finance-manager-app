@@ -201,7 +201,7 @@ function Dashboard() {
                 </NavIcon>
                 <NavIcon onClick={() => setShowAllTransactions(!showAllTransactions)}>
                     <FcDocument />
-                    <span>{showAllTransactions || "Statement"}</span>
+                    <span>Statement</span>
                 </NavIcon>
                 <NavIcon onClick={handleLogout}>
                     <FaSignOutAlt />

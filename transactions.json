@@ -90,17 +90,9 @@
   {
     "id": "12",
     "userId": "3",
-    "description": "salry",
-    "amount": 40000,
-    "type": "income",
-    "date": "2024-07-17"
-  },
-  {
-    "id": "13",
-    "userId": "3",
-    "description": "asdfg",
+    "description": "qwerghj",
     "amount": 123456,
     "type": "income",
-    "date": "2024-07-15"
+    "date": "2024-07-11"
   }
 ]
