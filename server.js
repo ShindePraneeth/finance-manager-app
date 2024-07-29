@@ -1,8 +1,10 @@
-//finance-manager\server.mjs
-import express from 'express';
-import jwt from 'jsonwebtoken';
-import cors from 'cors';
-import fs from 'fs/promises';
+// 
+
+
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const fs = require('fs/promises');
 
 const app = express();
 const PORT = 3001;
@@ -12,23 +14,27 @@ app.use(cors());
 app.use(express.json());
 
 // Read user data
-let users;
-try {
-  const userData = await fs.readFile('user.json', 'utf8');
-  users = JSON.parse(userData);
-} catch (error) {
-  console.error('Error reading user data:', error);
-  users = [];
-}
-// Read transactions data
-let transactions;
-try {
-  const transactionData = await fs.readFile('transactions.json', 'utf8');
-  transactions = JSON.parse(transactionData);
-} catch (error) {
-  console.error('Error reading transaction data:', error);
-  transactions = [];
-}
+let users = [];
+let transactions = [];
+
+const initializeData = async () => {
+  try {
+    const userData = await fs.readFile('user.json', 'utf8');
+    users = JSON.parse(userData);
+  } catch (error) {
+    console.error('Error reading user data:', error);
+  }
+
+  try {
+    const transactionData = await fs.readFile('transactions.json', 'utf8');
+    transactions = JSON.parse(transactionData);
+  } catch (error) {
+    console.error('Error reading transaction data:', error);
+  }
+};
+
+initializeData();
+
 // Registration route
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
@@ -70,6 +76,7 @@ app.post('/login', (req, res) => {
     res.status(401).json({ message: 'Invalid credentials' });
   }
 });
+
 // Middleware to verify JWT
 const verifyToken = (req, res, next) => {
   const token = req.headers['authorization'];
@@ -107,6 +114,8 @@ app.post('/transactions', verifyToken, async (req, res) => {
     res.status(500).json({ message: 'Error saving transaction' });
   }
 });
+
+// Update a transaction
 app.put('/transactions/:id', verifyToken, async (req, res) => {
   const transactionId = req.params.id;
   const index = transactions.findIndex(t => t.id === transactionId && t.userId === req.userId);
@@ -132,7 +141,6 @@ app.put('/transactions/:id', verifyToken, async (req, res) => {
     res.status(500).json({ message: 'Error updating transaction' });
   }
 });
-
 
 // Delete a transaction
 app.delete('/transactions/:id', verifyToken, async (req, res) => {

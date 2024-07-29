@@ -199,7 +199,7 @@ function Dashboard() {
                     <FcAddDatabase />
                     <span>Add Transaction</span>
                 </NavIcon>
-                <NavIcon onClick={() => setShowAllTransactions(!showAllTransactions)}>
+                <NavIcon onClick={() => setShowAllTransactions(AllTransactionsList)}>
                     <FcDocument />
                     <span>Statement</span>
                 </NavIcon>

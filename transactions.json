@@ -80,19 +80,19 @@
     "date": "2024-07-25"
   },
   {
-    "id": "11",
-    "userId": "3",
-    "description": "food",
-    "amount": 2345,
-    "type": "expense",
-    "date": "2024-07-02"
-  },
-  {
     "id": "12",
     "userId": "3",
     "description": "qwerghj",
     "amount": 123456,
     "type": "income",
     "date": "2024-07-11"
+  },
+  {
+    "id": "13",
+    "userId": "3",
+    "description": "qazwsx",
+    "amount": 2,
+    "type": "expense",
+    "date": "2024-07-14"
   }
 ]
