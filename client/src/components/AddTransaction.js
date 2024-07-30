@@ -8,7 +8,7 @@ function AddTransaction() {
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(''); // Add state for date
 
-  const [type, setType] = useState('expense');
+  const [category, setcategory] = useState('expense');
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +17,7 @@ function AddTransaction() {
         { 
           description, 
           amount: parseFloat(amount), 
-          type: type.toLowerCase(), 
+          category: category.toLowerCase(), 
           date: date 
         },
         { headers: { Authorization: localStorage.getItem('token') } }
@@ -57,7 +57,7 @@ function AddTransaction() {
         onChange={(e) => setDate(e.target.value)}
         required
         />
-        <Select value={type} onChange={(e) => setType(e.target.value)}>
+        <Select value={category} onChange={(e) => setcategory(e.target.value)}>
           <option value="Expense">Expense</option>
           <option value="Income">Income</option>
         </Select>

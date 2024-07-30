@@ -63,10 +63,10 @@ function Dashboard() {
         navigate('/');
     };
     const incomeTransactions = transactions.filter(t =>
-        (t.type || t.category || '').toLowerCase() === 'income'
+        (t.category || '').toLowerCase() === 'income'
     );
     const expenseTransactions = transactions.filter(t =>
-        (t.type || t.category || '').toLowerCase() === 'expense'
+        ( t.category || '').toLowerCase() === 'expense'
     );
 
     const TransactionList = ({ transactions, title }) => (
@@ -150,7 +150,7 @@ function Dashboard() {
                         <th style={tableHeaderStyle}>Description</th>
                         <th style={tableHeaderStyle}>Amount</th>
                         <th style={tableHeaderStyle}>Date</th>
-                        <th style={tableHeaderStyle}>Type</th>
+                        <th style={tableHeaderStyle}>Category</th>
                         <th style={tableHeaderStyle}>Actions</th>
                     </tr>
                 </thead>
@@ -161,7 +161,7 @@ function Dashboard() {
                             <td style={tableCellStyle}>{transaction.description}</td>
                             <td style={tableCellStyle}>${transaction.amount}</td>
                             <td style={tableCellStyle}>{transaction.date}</td>
-                            <td style={tableCellStyle}>{transaction.type || transaction.category}</td>
+                            <td style={tableCellStyle}>{transaction.category}</td>
                             <td style={tableCellStyle}>
                                 <LiaEdit onClick={() => handleEdit(transaction.id)} style={iconStyle} />
                                 <FcFullTrash onClick={() => handleDelete(transaction.id)} style={iconStyle} />

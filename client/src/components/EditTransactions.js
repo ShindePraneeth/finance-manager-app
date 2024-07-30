@@ -6,7 +6,7 @@ import { Container, Form, Input, Button, Title ,Select} from '../styles';
 function EditTransaction() {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
-  const [type, setType] = useState('');
+  const [category, setcategory] = useState('');
   const [date, setDate] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ function EditTransaction() {
       const transaction = response.data;
       setDescription(transaction.description);
       setAmount(transaction.amount);
-      setType(transaction.type || 'expense');
+      setcategory(transaction.category || 'expense');
       setDate(transaction.date);
     } catch (error) {
       console.error('Error fetching transaction:', error);
@@ -34,7 +34,7 @@ function EditTransaction() {
     e.preventDefault();
     try {
       await axios.put(`http://localhost:3001/transactions/${id}`, 
-        { description, amount: parseFloat(amount), type: type.toLowerCase(), date },
+        { description, amount: parseFloat(amount), category: category.toLowerCase(), date },
         { headers: { Authorization: localStorage.getItem('token') } }
       );
       navigate('/dashboard');
@@ -61,7 +61,7 @@ function EditTransaction() {
           onChange={(e) => setAmount(e.target.value)}
           required
         />
-        <Select value={type} onChange={(e) => setType(e.target.value)}>
+        <Select value={category} onChange={(e) => setcategory(e.target.value)}>
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </Select>

@@ -44,7 +44,7 @@
     "userId": "3",
     "description": "asdf",
     "amount": 123,
-    "type": "expense",
+    "category": "Expense",
     "date": "2024-07-22"
   },
   {
@@ -52,7 +52,7 @@
     "userId": "3",
     "description": "asdfg",
     "amount": 1234,
-    "type": "expense",
+    "category": "Expense",
     "date": "2024-07-01"
   },
   {
@@ -60,7 +60,7 @@
     "userId": "1",
     "description": "azscv",
     "amount": 1234,
-    "type": "income",
+    "category": "Income",
     "date": "2024-07-12"
   },
   {
@@ -68,7 +68,7 @@
     "userId": "8",
     "description": "salary",
     "amount": 6700,
-    "type": "income",
+    "category": "Income",
     "date": "2024-07-20"
   },
   {
@@ -76,7 +76,7 @@
     "userId": "8",
     "description": "princy",
     "amount": 90000,
-    "type": "expense",
+    "category": "Expense",
     "date": "2024-07-25"
   },
   {
@@ -84,15 +84,23 @@
     "userId": "3",
     "description": "qwerghj",
     "amount": 123456,
-    "type": "income",
+    "category": "Income",
     "date": "2024-07-11"
   },
   {
     "id": "13",
     "userId": "3",
-    "description": "qazwsx",
-    "amount": 2,
-    "type": "expense",
-    "date": "2024-07-14"
+    "description": "asdfghjknbvcfder",
+    "amount": 123,
+    "category": "income",
+    "date": "2023-12-22"
+  },
+  {
+    "id": "14",
+    "userId": "3",
+    "description": "sdfghytfv",
+    "amount": 567,
+    "category": "expense",
+    "date": "2024-07-21"
   }
 ]

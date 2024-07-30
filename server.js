@@ -1,4 +1,4 @@
-// 
+// //server.js
 
 
 const express = require('express');
@@ -99,10 +99,10 @@ app.get('/transactions', verifyToken, (req, res) => {
 app.post('/transactions', verifyToken, async (req, res) => {
   const newTransaction = {
     id: (transactions.length + 1).toString(),
-    userId: req.userId.toString(), // Ensure userId is a string
+    userId: req.userId.toString(),
     description: req.body.description,
     amount: parseFloat(req.body.amount),
-    type: (req.body.type || req.body.category || 'expense').toLowerCase(), // Normalize type/category
+    category: req.body.category.toLowerCase(), // Use category instead of type
     date: req.body.date
   };
   transactions.push(newTransaction);
@@ -124,11 +124,10 @@ app.put('/transactions/:id', verifyToken, async (req, res) => {
     return res.status(404).json({ message: 'Transaction not found or not authorized' });
   }
 
-  // Retain existing transaction details and only update fields that are provided
   const updatedTransaction = {
     ...transactions[index],
     ...req.body,
-    type: req.body.type || transactions[index].type // Ensure type is not overwritten with an empty value
+    category: req.body.category || transactions[index].category
   };
 
   transactions[index] = updatedTransaction;
