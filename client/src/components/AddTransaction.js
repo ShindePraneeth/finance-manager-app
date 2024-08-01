@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { Container, Form, Input, Button, Title,Select } from '../styles';
+import { Container, Form, Input, Button, Title, Select } from '../styles';
 
 export const ADD_TRANSACTION = gql`
   mutation AddTransaction($description: String!, $amount: Float!, $category: String!, $date: String!) {
@@ -18,7 +18,7 @@ export const ADD_TRANSACTION = gql`
 function AddTransaction() {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
-  const [category, setcategory] = useState('expense');
+  const [category, setCategory] = useState('Expense');
   const [date, setDate] = useState('');
   const [addTransaction] = useMutation(ADD_TRANSACTION);
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ function AddTransaction() {
     e.preventDefault();
     try {
       await addTransaction({ variables: { description, amount: parseFloat(amount), category, date } });
+      window.alert('Transaction added successfully!');
       navigate('/dashboard');
     } catch (error) {
       console.error(error);
@@ -51,7 +52,7 @@ function AddTransaction() {
           onChange={(e) => setAmount(e.target.value)}
           required
         />
-       <Select value={category} onChange={(e) => setcategory(e.target.value)}>
+        <Select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="Expense">Expense</option>
           <option value="Income">Income</option>
         </Select>

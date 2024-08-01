@@ -62,5 +62,13 @@
     "amount": 2000,
     "category": "expense",
     "date": "2024-08-02"
+  },
+  {
+    "id": "9",
+    "userId": "3",
+    "description": "food",
+    "amount": 200,
+    "category": "expense",
+    "date": "2024-08-14"
   }
 ]

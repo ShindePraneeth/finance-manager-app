@@ -13,14 +13,22 @@ function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [register] = useMutation(REGISTER_USER);
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await register({ variables: { username, email, password } });
+      window.alert('Registered successfully! redirecting to Login ! ');
       navigate('/');
     } catch (error) {
+      if (error.message.includes('username already exists')) {
+        setError('Username already exists');
+      } else {
+        setError('An error occurred. Please try again.');
+      }
       console.error(error);
     }
   };
@@ -52,6 +60,7 @@ function Register() {
         />
         <Button type="submit">Register</Button>
       </Form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </Container>
   );
 }

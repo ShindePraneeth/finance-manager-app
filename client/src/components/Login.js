@@ -13,6 +13,7 @@ export const LOGIN_USER = gql`
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [login] = useMutation(LOGIN_USER);
   const navigate = useNavigate();
 
@@ -23,6 +24,8 @@ function Login() {
       localStorage.setItem('token', data.login);
       navigate('/dashboard');
     } catch (error) {
+      setError('Invalid username or password');
+
       console.error(error);
     }
   };
@@ -54,6 +57,7 @@ function Login() {
         />
         <Button type="submit">Login</Button>
         </Form>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <p>Don't have an account? <LinkButton to="/register">Register</LinkButton></p>
       </div>

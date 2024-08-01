@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, gql, useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container, Form, Input, Button, Title,Select } from '../styles';
+import { Container, Form, Input, Button, Title, Select } from '../styles';
 
 export const GET_TRANSACTION = gql`
   query GetTransaction($id: ID!) {
@@ -32,7 +32,6 @@ function EditTransaction() {
   const { loading, error, data } = useQuery(GET_TRANSACTION);
   const [editTransaction] = useMutation(EDIT_TRANSACTION);
   const navigate = useNavigate();
-  const [category, setcategory] = useState('');
   const [transaction, setTransaction] = useState({
     description: '',
     amount: '',
@@ -67,6 +66,7 @@ function EditTransaction() {
           date: transaction.date
         }
       });
+      window.alert('Transaction edited successfully!');
       navigate('/dashboard');
     } catch (error) {
       console.error(error);
@@ -96,7 +96,12 @@ function EditTransaction() {
           onChange={handleChange}
           required
         />
-        <Select value={category} onChange={(e) => setcategory(e.target.value)}>
+        <Select
+          name="category"
+          value={transaction.category}
+          onChange={handleChange}
+          required
+        >
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </Select>

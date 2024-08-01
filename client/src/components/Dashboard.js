@@ -48,14 +48,18 @@ function Dashboard() {
         setSelectedYear(event.target.value);
     };
 
-    const handleDelete = async (id) => {
-        try {
-            await deleteTransaction({
-                variables: { id },
-            });
-            refetch();
-        } catch (error) {
-            console.error('Error deleting transaction:', error);
+    const handleDelete = async (id, description, amount, date) => {
+        const confirmMessage = `Are you sure you want to delete this transaction?\n\nDescription: ${description}\nAmount: $${amount}\nDate: ${date}`;
+        const isConfirmed = window.confirm(confirmMessage);
+        if (isConfirmed) {
+            try {
+                await deleteTransaction({
+                    variables: { id },
+                });
+                refetch();
+            } catch (error) {
+                console.error('Error deleting transaction:', error);
+            }
         }
     };
 
@@ -104,13 +108,13 @@ function Dashboard() {
                             <td style={tableCellStyle}>{transaction.date}</td>
                             <td style={tableCellStyle}>
                                 <LiaEdit onClick={() => handleEdit(transaction.id)} style={iconStyle} />
-                                <FcFullTrash onClick={() => handleDelete(transaction.id)} style={iconStyle} />
+                                <FcFullTrash onClick={() => handleDelete(transaction.id, transaction.description, transaction.amount, transaction.date)} style={iconStyle} />
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <div style={{ textAlign: 'right', marginTop: '10px', fontWeight: 'bold' ,padding: '5px', backgroundColor: '#f0f0f0', borderRadius: '5px'}}>
+            <div style={{ textAlign: 'right', marginTop: '10px', fontWeight: 'bold', padding: '5px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
                 Total {title}: ${calculateTotal(transactions)}
             </div>
         </Container>
@@ -150,7 +154,7 @@ function Dashboard() {
                             <td style={tableCellStyle}>{transaction.category}</td>
                             <td style={tableCellStyle}>
                                 <LiaEdit onClick={() => handleEdit(transaction.id)} style={iconStyle} />
-                                <FcFullTrash onClick={() => handleDelete(transaction.id)} style={iconStyle} />
+                                <FcFullTrash onClick={() => handleDelete(transaction.id, transaction.description, transaction.amount, transaction.date)} style={iconStyle} />
                             </td>
                         </tr>
                     ))}
@@ -182,7 +186,7 @@ function Dashboard() {
                     <span>Logout</span>
                 </NavIcon>
             </Header>
-            <div style={{ marginTop:'60px', marginBottom: '20px',padding: '2.5px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
+            <div style={{ marginTop: '60px', marginBottom: '20px', padding: '2.5px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
                 <label htmlFor="yearFilter">Filter by Year: </label>
                 <Select id="yearFilter" value={selectedYear} onChange={handleYearChange}>
                     <option value="">All Years</option>
@@ -223,7 +227,7 @@ function Dashboard() {
                             </tr>
                         </tbody>
                     </table>
-                    <div style={{ textAlign: 'right', marginTop: '20px', fontWeight: 'bold', fontSize: '1.2em',padding: '5px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
+                    <div style={{ textAlign: 'right', marginTop: '20px', fontWeight: 'bold', fontSize: '1.2em', padding: '5px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
                         Final Balance: ${calculateFinalBalance()}
                     </div>
                 </>
