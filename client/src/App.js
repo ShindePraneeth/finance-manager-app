@@ -5,7 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import AddTransaction from './components/AddTransaction';
-import EditTransaction from './components/EditTransactions';
+import EditTransaction from './components/EditTransaction';
 
 function App() {
   return (

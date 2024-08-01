@@ -125,3 +125,25 @@ export const iconStyle = {
   cursor: 'pointer',
   marginRight: '10px'
 };
+
+export const TransactionList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+`;
+
+export const TransactionItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+
+  Button {
+    margin-left: 10px;
+  }
+`;

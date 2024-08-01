@@ -1,19 +1,161 @@
-// //server.js
-
-
 const express = require('express');
-const jwt = require('jsonwebtoken');
+const { ApolloServer, gql } = require('apollo-server-express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const fs = require('fs/promises');
 
-const app = express();
-const PORT = 3001;
-const SECRET_KEY = 'your_secret_key';
+// Define your GraphQL schema using ApolloServer
+const typeDefs = gql`
+  type User {
+    id: ID!
+    username: String!
+    email: String!
+    password: String!
+  }
 
-app.use(cors());
-app.use(express.json());
+  type Transaction {
+    id: ID!
+    userId: ID!
+    description: String!
+    amount: Float!
+    category: String!
+    date: String!
+  }
 
-// Read user data
+  type Query {
+    getTransactions: [Transaction]
+  }
+
+  type Mutation {
+    register(username: String!, email: String!, password: String!): String
+    login(username: String!, password: String!): String
+    addTransaction(description: String!, amount: Float!, category: String!, date: String!): Transaction
+    editTransaction(id: ID!, description: String, amount: Float, category: String, date: String): Transaction
+    deleteTransaction(id: ID!): String
+  }
+`;
+
+const resolvers = {
+  Query: {
+    getTransactions: (parent, args, context) => {
+      const { userId } = context;
+      console.log(context)
+      return transactions.filter(t => t.userId.toString() === userId.toString());
+    },
+  },
+  Mutation: {
+    register: async (parent,args) => {
+      const { username, email, password } = args || {};
+
+      console.log(username, password, email);
+      if (!username || !email || !password) {
+        throw new Error('Missing required fields');
+      }
+      if (users.find(u => u.username === username)) {
+        throw new Error('Username already exists');
+      }
+      if (users.find(u => u.email === email)) {
+        throw new Error('Email already exists');
+      }
+
+      const newUser = {
+        id: users.length + 1,
+        username,
+        email,
+        password
+      };
+      users.push(newUser);
+
+      try {
+        await fs.writeFile('user.json', JSON.stringify(users, null, 2));
+        return 'User registered successfully';
+      } catch (error) {
+        console.error('Error writing user data:', error);
+        throw new Error('Error registering user');
+      }
+    },
+    login: (parent,args) => {
+
+      const { username, password } = args || {};
+      console.log(username,password);
+      const user = users.find(u => (u.username === username || u.email === username) && u.password === password);
+      console.log(user);
+      if (user) {
+        const token = jwt.sign({ id: user.id.toString(), username: user.username }, SECRET_KEY, { expiresIn: '1h' });
+        return token;
+      } else {
+        throw new Error('Invalid credentials');
+      }
+    },
+    addTransaction: async (parent,{ description, amount, category, date }, context) => {
+      const { userId } = context;
+      const newTransaction = {
+        id: (transactions.length + 1).toString(),
+        userId: userId.toString(),
+        description,
+        amount: parseFloat(amount),
+        category: category.toLowerCase(),
+        date
+      };
+      transactions.push(newTransaction);
+
+      try {
+        await fs.writeFile('transactions.json', JSON.stringify(transactions, null, 2));
+        return newTransaction;
+      } catch (error) {
+        console.error('Error writing transaction data:', error);
+        throw new Error('Error saving transaction');
+      }
+    },
+    editTransaction: async (parent,{ id, description, amount, category, date }, context) => {
+      const { userId } = context;
+      console.log(id,userId,description)
+      const index = transactions.findIndex(t => t.id === id && t.userId === userId);
+
+      if (index === -1) {
+        throw new Error('Transaction not found or not authorized');
+      }
+
+      const updatedTransaction = {
+        ...transactions[index],
+        description: description || transactions[index].description,
+        amount: amount !== undefined ? parseFloat(amount) : transactions[index].amount,
+        category: category ? category.toLowerCase() : transactions[index].category,
+        date: date || transactions[index].date
+      };
+
+      transactions[index] = updatedTransaction;
+
+      try {
+        await fs.writeFile('transactions.json', JSON.stringify(transactions, null, 2));
+        return updatedTransaction;
+      } catch (error) {
+        console.error('Error writing transaction data:', error);
+        throw new Error('Error updating transaction');
+      }
+    },
+    deleteTransaction: async (parent,{ id }, context) => {
+      const { userId } = context;
+      const index = transactions.findIndex(t => t.id === id && t.userId === userId);
+
+      if (index === -1) {
+        throw new Error('Transaction not found or not authorized');
+      }
+
+      transactions.splice(index, 1);
+
+      try {
+        await fs.writeFile('transactions.json', JSON.stringify(transactions, null, 2));
+        return 'Transaction deleted successfully';
+      } catch (error) {
+        console.error('Error writing transaction data:', error);
+        throw new Error('Error deleting transaction');
+      }
+    }
+  }
+};
+
+const SECRET_KEY = 'saran';
 let users = [];
 let transactions = [];
 
@@ -35,132 +177,40 @@ const initializeData = async () => {
 
 initializeData();
 
-// Registration route
-app.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;
-  
-  // Check if username or email already exists
-  if (users.find(u => u.username === username)) {
-    return res.status(400).json({ message: 'Username already exists' });
-  }
-  if (users.find(u => u.email === email)) {
-    return res.status(400).json({ message: 'Email already exists' });
-  }
-
-  const newUser = {
-    id: users.length + 1,
-    username,
-    email,
-    password // In a real app, you should hash this password
-  };
-  users.push(newUser);
-
+const getUserFromToken = (token) => {
   try {
-    await fs.writeFile('user.json', JSON.stringify(users, null, 2));
-    res.status(201).json({ message: 'User registered successfully' });
+    const tokenWithoutBearer = token.replace('Bearer ', '');
+    const decoded = jwt.verify(tokenWithoutBearer, SECRET_KEY);
+    return decoded.id;
   } catch (error) {
-    console.error('Error writing user data:', error);
-    res.status(500).json({ message: 'Error registering user' });
+    return null;
   }
-});
-
-// Login route
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  const user = users.find(u => (u.username === username || u.email === username) && u.password === password);
-
-  if (user) {
-    const token = jwt.sign({ id: user.id.toString(), username: user.username }, SECRET_KEY, { expiresIn: '1h' });
-    res.json({ token });
-  } else {
-    res.status(401).json({ message: 'Invalid credentials' });
-  }
-});
-
-// Middleware to verify JWT
-const verifyToken = (req, res, next) => {
-  const token = req.headers['authorization'];
-  if (!token) return res.status(403).json({ message: 'No token provided' });
-
-  jwt.verify(token, SECRET_KEY, (err, decoded) => {
-    if (err) return res.status(500).json({ message: 'Failed to authenticate token' });
-    req.userId = decoded.id;
-    next();
-  });
 };
 
-// Get transactions for a user
-app.get('/transactions', verifyToken, (req, res) => {
-  const userTransactions = transactions.filter(t => t.userId.toString() === req.userId.toString());
-  res.json(userTransactions);
-});
-
-// Add a new transaction
-app.post('/transactions', verifyToken, async (req, res) => {
-  const newTransaction = {
-    id: (transactions.length + 1).toString(),
-    userId: req.userId.toString(),
-    description: req.body.description,
-    amount: parseFloat(req.body.amount),
-    category: req.body.category.toLowerCase(), // Use category instead of type
-    date: req.body.date
-  };
-  transactions.push(newTransaction);
-  try {
-    await fs.writeFile('transactions.json', JSON.stringify(transactions, null, 2));
-    res.json(newTransaction);
-  } catch (error) {
-    console.error('Error writing transaction data:', error);
-    res.status(500).json({ message: 'Error saving transaction' });
+// Create an Apollo Server instance
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req }) => {
+    const token = req.headers.authorization || '';
+    const userId = getUserFromToken(token);
+    return { userId };
   }
 });
 
-// Update a transaction
-app.put('/transactions/:id', verifyToken, async (req, res) => {
-  const transactionId = req.params.id;
-  const index = transactions.findIndex(t => t.id === transactionId && t.userId === req.userId);
-  
-  if (index === -1) {
-    return res.status(404).json({ message: 'Transaction not found or not authorized' });
-  }
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-  const updatedTransaction = {
-    ...transactions[index],
-    ...req.body,
-    category: req.body.category || transactions[index].category
-  };
+// Start the Apollo Server and apply middleware to Express
+const startServer = async () => {
+  await server.start(); // Wait for the Apollo server to start
+  server.applyMiddleware({ app }); // Apply middleware to Express
 
-  transactions[index] = updatedTransaction;
+  // Start the Express server
+  app.listen({ port: 4000 }, () =>
+    console.log(`Server running at http://localhost:4000${server.graphqlPath}`)
+  );
+};
 
-  try {
-    await fs.writeFile('transactions.json', JSON.stringify(transactions, null, 2));
-    res.json(updatedTransaction);
-  } catch (error) {
-    console.error('Error writing transaction data:', error);
-    res.status(500).json({ message: 'Error updating transaction' });
-  }
-});
-
-// Delete a transaction
-app.delete('/transactions/:id', verifyToken, async (req, res) => {
-  const transactionId = req.params.id;
-  const index = transactions.findIndex(t => t.id === transactionId && t.userId === req.userId);
-  
-  if (index === -1) {
-    return res.status(404).json({ message: 'Transaction not found or not authorized' });
-  }
-
-  transactions.splice(index, 1);
-
-  try {
-    await fs.writeFile('transactions.json', JSON.stringify(transactions, null, 2));
-    res.json({ message: 'Transaction deleted successfully' });
-  } catch (error) {
-    console.error('Error writing transaction data:', error);
-    res.status(500).json({ message: 'Error deleting transaction' });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+startServer();

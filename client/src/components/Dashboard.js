@@ -1,61 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useQuery, gql, useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { LiaEdit } from "react-icons/lia";
 import { FcHome, FcDocument, FcAddDatabase, FcFullTrash } from "react-icons/fc";
 import { Container, NavIcon, Header, Title, tableHeaderStyle, tableCellStyle, iconStyle, Select } from '../styles';
 
+export const GET_TRANSACTIONS = gql`
+  query GetTransactions {
+    getTransactions {
+      id
+      description
+      amount
+      category
+      date
+    }
+  }
+`;
+
+export const DELETE_TRANSACTION = gql`
+  mutation DeleteTransaction($id: ID!) {
+    deleteTransaction(id: $id)
+  }
+`;
+
 function Dashboard() {
     const [showAllTransactions, setShowAllTransactions] = useState(false);
-    const [transactions, setTransactions] = useState([]);
-    const [filteredTransactions, setFilteredTransactions] = useState([]);
-    const navigate = useNavigate();
     const [selectedMonth, setSelectedMonth] = useState('');
     const [selectedYear, setSelectedYear] = useState('');
+    const navigate = useNavigate();
+    const { loading, error, data, refetch } = useQuery(GET_TRANSACTIONS);
+    const [deleteTransaction] = useMutation(DELETE_TRANSACTION);
 
     useEffect(() => {
-        fetchTransactions();
-    }, []);
-
-    useEffect(() => {
-        filterTransactions();
-    }, [selectedMonth, selectedYear, transactions]);
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/');
+        }
+        refetch().catch(err => console.error('Error refetching data:', err));
+    }, [navigate, refetch]);
 
     const handleMonthChange = (event) => {
         setSelectedMonth(event.target.value);
     };
+
     const handleYearChange = (event) => {
         setSelectedYear(event.target.value);
     };
 
-    const fetchTransactions = async () => {
-        try {
-            const response = await axios.get('http://localhost:3001/transactions', {
-                headers: { Authorization: localStorage.getItem('token') }
-            });
-            setTransactions(response.data);
-        } catch (error) {
-            console.error('Error fetching transactions:', error);
-            if (error.response && error.response.status === 403) {
-                localStorage.removeItem('token');
-                navigate('/');
-            }
-        }
-    };
-
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/transactions/${id}`, {
-                headers: { Authorization: localStorage.getItem('token') }
+            await deleteTransaction({
+                variables: { id },
             });
-            setTransactions(transactions.filter(t => t.id !== id));
+            refetch();
         } catch (error) {
             console.error('Error deleting transaction:', error);
-            if (error.response && error.response.status === 403) {
-                localStorage.removeItem('token');
-                navigate('/');
-            }
         }
     };
 
@@ -68,16 +68,19 @@ function Dashboard() {
         navigate('/');
     };
 
-    const filterTransactions = () => {
-        const filtered = transactions.filter(transaction => {
+    const filterTransactions = (transactions) => {
+        return transactions.filter(transaction => {
             const transactionDate = new Date(transaction.date);
             const monthMatch = !selectedMonth || transactionDate.getMonth() === parseInt(selectedMonth);
             const yearMatch = !selectedYear || transactionDate.getFullYear() === parseInt(selectedYear);
             return monthMatch && yearMatch;
         });
-        setFilteredTransactions(filtered);
     };
 
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
+
+    const filteredTransactions = filterTransactions(data.getTransactions);
     const incomeTransactions = filteredTransactions.filter(t => (t.category || '').toLowerCase() === 'income');
     const expenseTransactions = filteredTransactions.filter(t => (t.category || '').toLowerCase() === 'expense');
 
@@ -107,7 +110,7 @@ function Dashboard() {
                     ))}
                 </tbody>
             </table>
-            <div style={{ textAlign: 'right', marginTop: '10px', fontWeight: 'bold' }}>
+            <div style={{ textAlign: 'right', marginTop: '10px', fontWeight: 'bold' ,padding: '5px', backgroundColor: '#f0f0f0', borderRadius: '5px'}}>
                 Total {title}: ${calculateTotal(transactions)}
             </div>
         </Container>
@@ -126,63 +129,35 @@ function Dashboard() {
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
-    const AllTransactionsList = () => {
-        return (
-            <Container>
-                <div style={{ marginBottom: '20px' }}>
-                    <label htmlFor="yearFilter">Filter by Year: </label>
-                    <Select id="yearFilter" value={selectedYear} onChange={handleYearChange}>
-                        <option value="">All Years</option>
-                        {years.map(year => (
-                            <option key={year} value={year}>{year}</option>
-                        ))}
-                    </Select>
-                    <label htmlFor="monthFilter" style={{ marginLeft: '20px' }}>Filter by Month: </label>
-                    <Select id="monthFilter" value={selectedMonth} onChange={handleMonthChange}>
-                        <option value="">All Months</option>
-                        <option value="0">January</option>
-                        <option value="1">February</option>
-                        <option value="2">March</option>
-                        <option value="3">April</option>
-                        <option value="4">May</option>
-                        <option value="5">June</option>
-                        <option value="6">July</option>
-                        <option value="7">August</option>
-                        <option value="8">September</option>
-                        <option value="9">October</option>
-                        <option value="10">November</option>
-                        <option value="11">December</option>
-                    </Select>
-                </div>
-
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead>
-                        <tr>
-                            <th style={tableHeaderStyle}>Description</th>
-                            <th style={tableHeaderStyle}>Amount</th>
-                            <th style={tableHeaderStyle}>Date</th>
-                            <th style={tableHeaderStyle}>Category</th>
-                            <th style={tableHeaderStyle}>Actions</th>
+    const AllTransactionsList = () => (
+        <Container>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                    <tr>
+                        <th style={tableHeaderStyle}>Description</th>
+                        <th style={tableHeaderStyle}>Amount</th>
+                        <th style={tableHeaderStyle}>Date</th>
+                        <th style={tableHeaderStyle}>Category</th>
+                        <th style={tableHeaderStyle}>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredTransactions.map(transaction => (
+                        <tr key={transaction.id}>
+                            <td style={tableCellStyle}>{transaction.description}</td>
+                            <td style={tableCellStyle}>${transaction.amount}</td>
+                            <td style={tableCellStyle}>{transaction.date}</td>
+                            <td style={tableCellStyle}>{transaction.category}</td>
+                            <td style={tableCellStyle}>
+                                <LiaEdit onClick={() => handleEdit(transaction.id)} style={iconStyle} />
+                                <FcFullTrash onClick={() => handleDelete(transaction.id)} style={iconStyle} />
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {filteredTransactions.map(transaction => (
-                            <tr key={transaction.id}>
-                                <td style={tableCellStyle}>{transaction.description}</td>
-                                <td style={tableCellStyle}>${transaction.amount}</td>
-                                <td style={tableCellStyle}>{transaction.date}</td>
-                                <td style={tableCellStyle}>{transaction.category}</td>
-                                <td style={tableCellStyle}>
-                                    <LiaEdit onClick={() => handleEdit(transaction.id)} style={iconStyle} />
-                                    <FcFullTrash onClick={() => handleDelete(transaction.id)} style={iconStyle} />
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </Container>
-        );
-    };
+                    ))}
+                </tbody>
+            </table>
+        </Container>
+    );
 
     return (
         <Container>
@@ -207,7 +182,7 @@ function Dashboard() {
                     <span>Logout</span>
                 </NavIcon>
             </Header>
-            <div style={{ marginBottom: '20px' }}>
+            <div style={{ marginTop:'60px', marginBottom: '20px',padding: '2.5px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
                 <label htmlFor="yearFilter">Filter by Year: </label>
                 <Select id="yearFilter" value={selectedYear} onChange={handleYearChange}>
                     <option value="">All Years</option>
@@ -248,7 +223,7 @@ function Dashboard() {
                             </tr>
                         </tbody>
                     </table>
-                    <div style={{ textAlign: 'right', marginTop: '20px', fontWeight: 'bold', fontSize: '1.2em' }}>
+                    <div style={{ textAlign: 'right', marginTop: '20px', fontWeight: 'bold', fontSize: '1.2em',padding: '5px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
                         Final Balance: ${calculateFinalBalance()}
                     </div>
                 </>

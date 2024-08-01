@@ -1,49 +1,48 @@
-//finance-manager\client\src\components\Login.js
-import React, { useState,useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { useMutation, gql } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { Container, Form, Input, Button, Title, LinkButton } from'../styles';
+import { Container, Form, Input, Button, Title ,LinkButton } from '../styles';
 import loginImage from '../img.jpeg'; // Import your image
-//client\src\components\login img.jpeg
+
+export const LOGIN_USER = gql`
+  mutation Login($username: String!, $password: String!) {
+    login(username: $username, password: $password)
+  }
+`;
+
 function Login() {
-  const [usernameOrEmail, setUsernameOrEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [login] = useMutation(LOGIN_USER);
   const navigate = useNavigate();
-  useEffect(() => {
-    // Check if the user is already logged in
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate('/dashboard');
-    }
-  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/login', { username: usernameOrEmail, password });
-      localStorage.setItem('token', response.data.token);
+      const { data } = await login({ variables: { username, password } });
+      localStorage.setItem('token', data.login);
       navigate('/dashboard');
     } catch (error) {
-      alert('Invalid credentials');
+      console.error(error);
     }
   };
 
   return (
     <Container>
-      <div style={{ textAlign: 'right', marginTop: '20px', fontWeight: 'bold', fontSize: '1.2em' }}>
+        <div style={{ textAlign: 'right', marginTop: '20px', fontWeight: 'bold', fontSize: '1.2em' }}>
       <Title> Personal Finance Management</Title>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <img src={loginImage} alt="Login" style={{ width: '40%', height: 'auto', marginRight: '10px',marginLeft: '30px' }} />
         <div style={{ width: '50%' }}>
-
+            
       <Title>Login</Title>
       <Form onSubmit={handleSubmit}>
         <Input
           type="text"
           placeholder="Username or Email"
-          value={usernameOrEmail}
-          onChange={(e) => setUsernameOrEmail(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           required
         />
         <Input
@@ -54,10 +53,11 @@ function Login() {
           required
         />
         <Button type="submit">Login</Button>
-      </Form>
+        </Form>
+
       <p>Don't have an account? <LinkButton to="/register">Register</LinkButton></p>
       </div>
-      </div>
+       </div> 
     </Container>
   );
 }

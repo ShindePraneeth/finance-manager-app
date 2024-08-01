@@ -1,27 +1,27 @@
-//finance-manager\client\src\components\Register.js
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useMutation, gql } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
+import { Container, Form, Input, Button, Title } from '../styles';
 
-import { Container, Form, Input, Button, Title, LinkButton } from'../styles';
+export const REGISTER_USER = gql`
+  mutation Register($username: String!, $email: String!, $password: String!) {
+    register(username: $username, email: $email, password: $password)
+  }
+`;
+
 function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [register] = useMutation(REGISTER_USER);
   const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3001/register', { username,password, email  });
-      alert('Registration successful! Please login.');
+      await register({ variables: { username, email, password } });
       navigate('/');
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        alert(error.response.data.message);
-      } else {
-        alert('An error occurred during registration');
-      }
+      console.error(error);
     }
   };
 
@@ -36,13 +36,6 @@ function Register() {
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-         <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
         <Input
           type="email"
           placeholder="Email"
@@ -50,10 +43,15 @@ function Register() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-       
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <Button type="submit">Register</Button>
       </Form>
-      <p>Already have an account? <LinkButton to="/">Login</LinkButton></p>
     </Container>
   );
 }
