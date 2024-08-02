@@ -1,8 +1,7 @@
 // finance-manager/client/src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ApolloProvider, InMemoryCache, ApolloClient, createHttpLink, HttpLink, ApolloLink, from } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+import { ApolloProvider, InMemoryCache, ApolloClient, HttpLink, ApolloLink, from } from '@apollo/client';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';

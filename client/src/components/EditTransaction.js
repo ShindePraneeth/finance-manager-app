@@ -29,7 +29,7 @@ export const EDIT_TRANSACTION = gql`
 
 function EditTransaction() {
   const { id } = useParams();
-  const { loading, error, data } = useQuery(GET_TRANSACTION);
+  const { loading, error, data } = useQuery(GET_TRANSACTION, { variables: { id } });
   const [editTransaction] = useMutation(EDIT_TRANSACTION);
   const navigate = useNavigate();
   const [transaction, setTransaction] = useState({
@@ -42,7 +42,9 @@ function EditTransaction() {
   useEffect(() => {
     if (data) {
       const transactionData = data.getTransactions.find(t => t.id === id);
-      setTransaction(transactionData);
+      if (transactionData) {
+        setTransaction(transactionData);
+      }
     }
   }, [data, id]);
 
@@ -80,23 +82,29 @@ function EditTransaction() {
     <Container>
       <Title>Edit Transaction</Title>
       <Form onSubmit={handleSubmit}>
+        <label htmlFor="description">Description</label>
         <Input
           type="text"
+          id="description"
           name="description"
           placeholder="Description"
           value={transaction.description}
           onChange={handleChange}
           required
         />
+        <label htmlFor="amount">Amount</label>
         <Input
           type="number"
+          id="amount"
           name="amount"
           placeholder="Amount"
           value={transaction.amount}
           onChange={handleChange}
           required
         />
+        <label htmlFor="category">Category</label>
         <Select
+          id="category"
           name="category"
           value={transaction.category}
           onChange={handleChange}
@@ -105,8 +113,10 @@ function EditTransaction() {
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </Select>
+        <label htmlFor="date">Date</label>
         <Input
           type="date"
+          id="date"
           name="date"
           placeholder="Date"
           value={transaction.date}

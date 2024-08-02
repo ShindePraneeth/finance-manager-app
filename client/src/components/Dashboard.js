@@ -169,19 +169,19 @@ function Dashboard() {
                 <NavIcon onClick={() => {
                     setShowAllTransactions(false);
                     navigate('/dashboard');
-                }}>
+                }} data-testid="home-icon">
                     <FcHome />
                     <span>Dashboard</span>
                 </NavIcon>
-                <NavIcon onClick={() => navigate('/add-transaction')}>
+                <NavIcon onClick={() => navigate('/add-transaction')} data-testid="add-icon">
                     <FcAddDatabase />
                     <span>Add Transaction</span>
                 </NavIcon>
-                <NavIcon onClick={() => setShowAllTransactions(true)}>
+                <NavIcon onClick={() => setShowAllTransactions(true)} data-testid="statement-icon">
                     <FcDocument />
                     <span>Statement</span>
                 </NavIcon>
-                <NavIcon onClick={handleLogout}>
+                <NavIcon onClick={handleLogout} data-testid="logout-icon">
                     <FaSignOutAlt />
                     <span>Logout</span>
                 </NavIcon>
@@ -227,7 +227,7 @@ function Dashboard() {
                             </tr>
                         </tbody>
                     </table>
-                    <div style={{ textAlign: 'right', marginTop: '20px', fontWeight: 'bold', fontSize: '1.2em', padding: '5px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
+                    <div style={{ textAlign: 'center', marginTop: '20px', fontWeight: 'bold', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
                         Final Balance: ${calculateFinalBalance()}
                     </div>
                 </>

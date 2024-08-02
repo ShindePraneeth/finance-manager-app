@@ -21,7 +21,7 @@ function Register() {
     e.preventDefault();
     try {
       await register({ variables: { username, email, password } });
-      window.alert('Registered successfully! redirecting to Login ! ');
+      window.alert('Registered successfully! Redirecting to Login!');
       navigate('/');
     } catch (error) {
       if (error.message.includes('username already exists')) {
@@ -37,21 +37,27 @@ function Register() {
     <Container>
       <Title>Register</Title>
       <Form onSubmit={handleSubmit}>
+        <label htmlFor="username">Username</label>
         <Input
+          id="username"
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
+        <label htmlFor="email">Email</label>
         <Input
+          id="email"
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+        <label htmlFor="password">Password</label>
         <Input
+          id="password"
           type="password"
           placeholder="Password"
           value={password}

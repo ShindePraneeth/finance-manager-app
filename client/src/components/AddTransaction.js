@@ -38,26 +38,33 @@ function AddTransaction() {
     <Container>
       <Title>Add Transaction</Title>
       <Form onSubmit={handleSubmit}>
+        <label htmlFor="description">Description</label>
         <Input
           type="text"
+          id="description"
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
         />
+        <label htmlFor="amount">Amount</label>
         <Input
           type="number"
+          id="amount"
           placeholder="Amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           required
         />
-        <Select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <label htmlFor="category">Category</label>
+        <Select id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="Expense">Expense</option>
           <option value="Income">Income</option>
         </Select>
+        <label htmlFor="date">Date</label>
         <Input
           type="date"
+          id="date"
           placeholder="Date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
