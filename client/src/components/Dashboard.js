@@ -107,8 +107,8 @@ function Dashboard() {
                             <td style={tableCellStyle}>${transaction.amount}</td>
                             <td style={tableCellStyle}>{transaction.date}</td>
                             <td style={tableCellStyle}>
-                                <LiaEdit onClick={() => handleEdit(transaction.id)} style={iconStyle} />
-                                <FcFullTrash onClick={() => handleDelete(transaction.id, transaction.description, transaction.amount, transaction.date)} style={iconStyle} />
+                                <LiaEdit onClick={() => handleEdit(transaction.id)} style={iconStyle} data-testid={`edit-${transaction.id}`} />
+                                <FcFullTrash onClick={() => handleDelete(transaction.id, transaction.description, transaction.amount, transaction.date)} style={iconStyle} data-testid={`delete-${transaction.id}`} />
                             </td>
                         </tr>
                     ))}
@@ -153,9 +153,9 @@ function Dashboard() {
                             <td style={tableCellStyle}>{transaction.date}</td>
                             <td style={tableCellStyle}>{transaction.category}</td>
                             <td style={tableCellStyle}>
-                                <LiaEdit onClick={() => handleEdit(transaction.id)} style={iconStyle} />
-                                <FcFullTrash onClick={() => handleDelete(transaction.id, transaction.description, transaction.amount, transaction.date)} style={iconStyle} />
-                            </td>
+                                <LiaEdit onClick={() => handleEdit(transaction.id)} style={iconStyle} data-testid={`edit-${transaction.id}`} />
+                                <FcFullTrash onClick={() => handleDelete(transaction.id, transaction.description, transaction.amount, transaction.date)} style={iconStyle} data-testid={`delete-${transaction.id}`} />
+                                </td>
                         </tr>
                     ))}
                 </tbody>
@@ -181,7 +181,7 @@ function Dashboard() {
                     <FcDocument />
                     <span>Statement</span>
                 </NavIcon>
-                <NavIcon onClick={handleLogout} data-testid="logout-icon">
+                <NavIcon data-testid="logout-button" onClick={handleLogout} >
                     <FaSignOutAlt />
                     <span>Logout</span>
                 </NavIcon>
