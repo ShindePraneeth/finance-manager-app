@@ -9,6 +9,7 @@ import EditTransaction from './components/EditTransaction';
 
 function App() {
   return (
+
     <Router>
       <div className="App">
 
@@ -23,6 +24,7 @@ function App() {
               </PrivateRoute>
             }
           />
+
           <Route
             path="/add-transaction"
             element={
@@ -42,6 +44,7 @@ function App() {
         </Routes>
       </div>
     </Router>
+
   );
 }
 

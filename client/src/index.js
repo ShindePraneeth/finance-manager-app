@@ -6,28 +6,6 @@ import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
  
-// Create an HttpLink to point to the GraphQL server
-// const httpLink = createHttpLink({
-//   uri: 'http://localhost:4000/graphql', // Change the port to 4000
-// });
- 
-// // Create an authLink to include the token in the headers
-// const authLink = setContext((_, { headers }) => {
-//   const token = localStorage.getItem('token');
-//   return {
-//     headers: {
-//       ...headers,
-//       authorization: token ? `Bearer ${token}` : '',
-//     }
-//   };
-// });
- 
-// // Initialize Apollo Client
-// const client = new ApolloClient({
-//   link: authLink.concat(httpLink),
-//   cache: new InMemoryCache()
-// });
- 
  
 const httpLink = new HttpLink({
   uri: 'http://localhost:4000/graphql',

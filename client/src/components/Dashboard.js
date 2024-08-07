@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, gql, useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { LiaEdit } from "react-icons/lia";
 import { FcHome, FcDocument, FcAddDatabase, FcFullTrash } from "react-icons/fc";
@@ -31,14 +31,17 @@ function Dashboard() {
     const navigate = useNavigate();
     const { loading, error, data, refetch } = useQuery(GET_TRANSACTIONS);
     const [deleteTransaction] = useMutation(DELETE_TRANSACTION);
+    const location = useLocation();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
-            navigate('/');
+            navigate('/', { replace: true });
+        } else if (location.pathname === '/') {
+            navigate('/dashboard', { replace: true });
         }
         refetch().catch(err => console.error('Error refetching data:', err));
-    }, [navigate, refetch]);
+    }, [navigate, refetch, location]);
 
     const handleMonthChange = (event) => {
         setSelectedMonth(event.target.value);
@@ -186,7 +189,7 @@ function Dashboard() {
                     <span>Logout</span>
                 </NavIcon>
             </Header>
-            <div style={{ marginTop: '60px', marginBottom: '20px', padding: '2.5px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
+            <div style={{ marginTop: '150px', marginBottom: '20px', padding: '2.5px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
                 <label htmlFor="yearFilter">Filter by Year: </label>
                 <Select id="yearFilter" value={selectedYear} onChange={handleYearChange}>
                     <option value="">All Years</option>

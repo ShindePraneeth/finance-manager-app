@@ -84,9 +84,9 @@ describe('Dashboard Component', () => {
     });
 
     // Check that the income and expense totals are displayed correctly
-    expect(screen.getByText('Total Income: $5000.00')).toBeInTheDocument();
-    expect(screen.getByText('Total Expenses: $200.00')).toBeInTheDocument();
-    expect(screen.getByText('Final Balance: $4800.00')).toBeInTheDocument();
+    expect(screen.getByText('Total Income: ₹5000.00')).toBeInTheDocument();
+    expect(screen.getByText('Total Expenses: ₹200.00')).toBeInTheDocument();
+    expect(screen.getByText('Final Balance: ₹4800.00')).toBeInTheDocument();
   });
 
   test('filters transactions by month and year', async () => {

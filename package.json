@@ -16,5 +16,8 @@
     "express": "^4.19.2",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "cypress": "^13.13.2"
   }
 }

@@ -17,6 +17,13 @@ function Login() {
   const [login] = useMutation(LOGIN_USER);
   const navigate = useNavigate();
 
+  // In your login component
+const handleLogin = async () => {
+  // ... login logic ...
+  if (loginSuccessful) {
+      navigate('/dashboard', { replace: true });
+  }
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

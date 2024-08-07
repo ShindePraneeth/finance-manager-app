@@ -46,5 +46,35 @@
     "username": "kumar",
     "email": "kumar@gmail.com",
     "password": "123456"
+  },
+  {
+    "id": 9,
+    "username": "nb",
+    "email": "as74@gmail.com",
+    "password": "123456"
+  },
+  {
+    "id": 10,
+    "username": "sbi",
+    "email": "sbi@gmail.com",
+    "password": "123456"
+  },
+  {
+    "id": 11,
+    "username": "newuser",
+    "email": "newuser@example.com",
+    "password": "password123"
+  },
+  {
+    "id": 12,
+    "username": "pranith",
+    "email": "pran@gmail.com",
+    "password": "123456"
+  },
+  {
+    "id": 13,
+    "username": "aaa",
+    "email": "aaa@gmail.com",
+    "password": "123456"
   }
 ]

@@ -51,7 +51,7 @@
     "id": "7",
     "userId": "3",
     "description": "salary",
-    "amount": 5100,
+    "amount": 5483,
     "category": "income",
     "date": "2024-07-01"
   },
@@ -59,7 +59,7 @@
     "id": "8",
     "userId": "3",
     "description": "rent",
-    "amount": 2000,
+    "amount": 2100,
     "category": "expense",
     "date": "2024-08-02"
   },
@@ -70,5 +70,101 @@
     "amount": 2500,
     "category": "income",
     "date": "2024-06-01"
+  },
+  {
+    "id": "10",
+    "userId": "3",
+    "description": "food",
+    "amount": 100,
+    "category": "expense",
+    "date": "2024-08-31"
+  },
+  {
+    "id": "11",
+    "userId": "3",
+    "description": "food",
+    "amount": 100,
+    "category": "expense",
+    "date": "2024-07-29"
+  },
+  {
+    "id": "12",
+    "userId": "3",
+    "description": "rgbn",
+    "amount": 789,
+    "category": "income",
+    "date": "2024-08-19"
+  },
+  {
+    "id": "14",
+    "userId": "3",
+    "description": "ssssssssssss",
+    "amount": 2,
+    "category": "expense",
+    "date": "2024-07-30"
+  },
+  {
+    "id": "14",
+    "userId": "11",
+    "description": "Grocery",
+    "amount": 50.75,
+    "category": "expense",
+    "date": "2024-08-05"
+  },
+  {
+    "id": "15",
+    "userId": "12",
+    "description": "salary",
+    "amount": 25000,
+    "category": "income",
+    "date": "2024-08-01"
+  },
+  {
+    "id": "16",
+    "userId": "3",
+    "description": "biryani",
+    "amount": 200,
+    "category": "expense",
+    "date": "2024-07-31"
+  },
+  {
+    "id": "17",
+    "userId": "3",
+    "description": "bike repair",
+    "amount": 2000,
+    "category": "expense",
+    "date": "2024-08-20"
+  },
+  {
+    "id": "18",
+    "userId": "3",
+    "description": "stipend",
+    "amount": 5000,
+    "category": "income",
+    "date": "2024-07-31"
+  },
+  {
+    "id": "19",
+    "userId": "3",
+    "description": "qwsdc",
+    "amount": 12,
+    "category": "expense",
+    "date": "2024-08-05"
+  },
+  {
+    "id": "20",
+    "userId": "3",
+    "description": "burger",
+    "amount": 215,
+    "category": "expense",
+    "date": "2024-08-01"
+  },
+  {
+    "id": "21",
+    "userId": "13",
+    "description": "salary",
+    "amount": 5000,
+    "category": "income",
+    "date": "2024-07-31"
   }
 ]

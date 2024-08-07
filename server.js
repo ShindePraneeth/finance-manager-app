@@ -155,7 +155,7 @@ const resolvers = {
   }
 };
 
-const SECRET_KEY = 'saran';
+const SECRET_KEY = 'pfa';
 let users = [];
 let transactions = [];
 
